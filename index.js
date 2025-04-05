@@ -8,6 +8,7 @@ var app = express();
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
+const res = require('express/lib/response');
 app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
@@ -24,6 +25,22 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/:date?", function(req, res){
+
+  let input = req.params.date;
+  let vDate = new Date(parseInt(req.params.date))
+
+  let unixVal = vDate.getTime();
+  let utcVal = vDate.toUTCString();
+
+  if(vDate.toUTCString() == null){
+    res.json({error: vDate});
+    return;
+  }
+
+  res.json({unix: unixVal, utc: utcVal});
+
+});
 
 
 // Listen on port set in environment variable or default to 3000
